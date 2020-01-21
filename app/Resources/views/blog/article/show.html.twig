@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Test</h1>
+
+    <table>
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ test.id }}</td>
+        </tr>
+        <tr>
+            <th>name</th>
+            <td>{{ test.name }}</td>
+        </tr>
+        <tr>
+            <th>text</th>
+            <td>{{ test.text }}</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('blog_test_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('blog_test_edit', { 'id': test.id }) }}">Edit</a>
+        </li>
+
+    </ul>
+{% endblock %}
