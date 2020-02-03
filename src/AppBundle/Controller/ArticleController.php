@@ -9,6 +9,7 @@ use AppBundle\Manager\ArticleManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Repository\ArticleRepository;
@@ -25,9 +26,20 @@ class ArticleController extends Controller
 {
     /**
      * @Route("/", name="blog_article_index")
+     * @Method("GET")
      */
     public function indexAction()
     {
+        $articleManager = $this->get('app.article_manager');
+
+       //$page = (int)$_GET['page'] ?? null;
+       $page = null;
+        //$limit = (int)$_GET['limit'] ?? null;
+        $limit = null;
+
+        $articles = $articleManager->getArticles($page = 1, $limit = 10);
+
+
         $em = $this->getDoctrine()->getManager();
 
         $articles = $em->getRepository('AppBundle:Article')->findAll();
@@ -36,51 +48,48 @@ class ArticleController extends Controller
     }
 
     /**
-     * Creates a new test entity.
-     *
-     * @Route("/new", name="blog_test_new")
+     * @Route("/new", name="blog_article_new")
      * @Method({"GET", "POST"})
      */
-    public function newAction(Request $request)
+    public function newAction()
     {
-        $article = new Article();
-        $form = $this->createForm('AppBundle\Form\ArticleType', $article);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($article);
-            $em->flush();
-
-            return $this->redirectToRoute('blog_article_show', array('id' => $article->getId()));
-        }
-
-        return $this->render('blog/new.html.twig', array(
-            'article' => $article,
-            'form' => $form->createView(),
-        ));
+        return $this->render('blog/article/newArticle.html.twig');
     }
 
     /**
-     * @Route("/{id}", name="blog_articles_show")
-     * @Method("GET")
+     * @Route("/new_article", name="blog_article_new_article")
+     * @Method({"POST"})
      */
-    public function showAction(int $id)
+    public function newArticle(Request $request)
     {
+        $articleManager = $this->get('app.article_manager');
+
+        $newArticle = new Article();
+        $newArticle->setUserId($_POST['userId']);
+        $newArticle->setName($_POST['name']);
+        $newArticle->setText($_POST['text']);
+        $newArticle->setCreatedAt(new \DateTime());
+        $newArticle->setIsActive(true);
+
+        $article = $articleManager->addArticle($newArticle);
+
+        return $this->render('blog/article/Article.html.twig', array('article' => $article));
+    }
+
+
+    /**
+     * @Route("/{id}", name="blog_articles_show", requirements={"id"="\d+"})
+     * @Method("GET")
+
+     */
+    public function showAction(int $id): JsonResponse
+    {
+        $serializer = $this->get('serializer');
         $article = $this->get('app.article_manager')->getArticle($id);//$this->getDoctrine()->getManager(ArticleManager::class)->getRepository(Article::class);
-        return $this->render('blog/article/show.html.twig', array('test' => $article));
+        return (new JsonResponse(null, JsonResponse::HTTP_OK))
+            ->setContent($serializer->serialize($article, 'json', []));
+        //return $this->render('blog/article/show.html.twig', array('test' => $article));
         //return new Response($article);
     }
-    /**
-     * @param Article $article The article entity
-     *
-     * @return \Symfony\Component\Form\Form  The form
-     */
-    private function createDeleteForm(Article $article)
-    {
-        return $this->createFormBuilder()
-            ->setAction($this->generateUrl('blog_article_delete', array('id' => $article->getId())))
-            ->setMethod('DELETE')
-            ->getForm();
-    }
+
 }
