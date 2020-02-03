@@ -4,6 +4,7 @@
 namespace AppBundle\Manager;
 
 
+use AppBundle\Entity\User;
 use AppBundle\Repository\UserRepository;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
@@ -23,5 +24,10 @@ class UserManager
     public function GetUser()
     {
         $this->doctrine->getRepository(UserRepository::class);
+    }
+
+    public function registrationUser(User $user)
+    {
+        return $this->doctrine->getRepository(User::class)->registrationUser($user);
     }
 }

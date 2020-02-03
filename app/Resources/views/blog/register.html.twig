@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Registration</h1>
+
+    <form class="registration" action="{{ path('blog_user_register') }}" method="post">
+        <label for="firstName" class="">First Name</label>
+        <input id="firstName" type="text" class="" name="firstName"><br><br>
+        <label for="lastName" class="">Last Name</label>
+        <input id="lastName" type="text" class="" name="lastName"><br><br>
+        <label for="email" class="">Email</label>
+        <input id="email" type="email" class="" name="email"><br><br>
+        <label for="phone" class="">Phone</label>
+        <input id="phone" type="text" class="" name="phone"><br><br>
+        <label for="password" class="">Password</label>
+        <input id="password" type="password" class="" name="password"><br><br>
+        <label for="roleId" class="">Role Id</label>
+        <input id="roleId" type="number" class="" name="roleId"><br><br>
+        <button type="submit">Попытайся зарегаться</button>
+    </form>
+{% endblock %}

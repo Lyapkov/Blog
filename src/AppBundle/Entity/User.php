@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints\DateTime;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * User
@@ -63,7 +64,7 @@ class User
      *
      * @ORM\Column(type="integer")
      */
-    private $role;
+    private $roleId;
 
     /**
      * @var \DateTime
@@ -75,7 +76,7 @@ class User
     /**
      * @var \DateTime
      *
-     * @ORM\Column(type="datetime", , nullable=true)
+     * @ORM\Column(type="datetime", nullable=true)
      */
     private $updatedAt;
 
@@ -194,9 +195,9 @@ class User
      *
      * @param int $role
      */
-    public function setRole($role): void
+    public function setRoleId($roleId): void
     {
-        $this->role = $role;
+        $this->roleId = $roleId;
     }
 
     /**
@@ -204,9 +205,9 @@ class User
      *
      * @return int
      */
-    public function getRole(): ?int
+    public function getRoleId(): ?int
     {
-        return $this->role;
+        return $this->roleId;
     }
 
     /**

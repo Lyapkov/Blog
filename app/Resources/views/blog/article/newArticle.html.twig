@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Добавить статью</h1>
+
+    <form class="registration" action="{{ path('blog_article_new_article') }}" method="post">
+        <label for="userId" class="">User Id</label>
+        <input id="userId" type="text" class="" name="userId"><br><br>
+        <label for="Name" class="">Name</label>
+        <input id="Name" type="text" class="" name="name"><br><br>
+        <label for="Text" class="">Text</label>
+        <input id="Text" type="text" class="" name="text"><br><br>
+        <button type="submit">Опубликовать</button>
+    </form>
+{% endblock %}

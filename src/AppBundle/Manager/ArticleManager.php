@@ -3,6 +3,7 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\Entity\Article;
 use Doctrine\Common\Persistence\ManagerRegistry;
 
 /**
@@ -21,7 +22,17 @@ class ArticleManager
     public function getArticle(int $id)
     {
 
-        return $this->doctrine->getRepository(\AppBundle\Entity\Article::class)->findById($id);
+        return $this->doctrine->getRepository(Article::class)->findById($id);
+    }
+
+    public function addArticle(Article $article)
+    {
+        return $this->doctrine->getRepository(Article::class)->addArticle($article);
+    }
+
+    public function getArticles($page, $limit)
+    {
+        return $this->doctrine->getRepository(Article::class)->getArticles($page, $limit);
     }
 
 }
