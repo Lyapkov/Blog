@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use AppBundle\Repository\ArticleRepository;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 
@@ -39,17 +40,12 @@ class ArticleController extends Controller
 
         $articles = $articleManager->getArticles($page = 1, $limit = 10);
 
-
-        $em = $this->getDoctrine()->getManager();
-
-        $articles = $em->getRepository('AppBundle:Article')->findAll();
-
-        return $this->render('blog/article/index.html.twig', array('articles' => $articles,));
+        return $this->render('blog/article/show.html.twig', array('articles' => $articles,));
     }
 
     /**
      * @Route("/new", name="blog_article_new")
-     * @Method({"GET", "POST"})
+     * @Method({"GET"})
      */
     public function newAction()
     {
@@ -62,6 +58,15 @@ class ArticleController extends Controller
      */
     public function newArticle(Request $request)
     {
+        $session = new Session();
+//        $session->start();
+
+        $a = $session->get('firstName');
+
+
+        var_dump($session->get('firstName'));
+        return new Response('<html><body>' .$a. '</body></html>');
+
         $articleManager = $this->get('app.article_manager');
 
         $newArticle = new Article();

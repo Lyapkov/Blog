@@ -72,6 +72,16 @@ class Article
     private $isActive;
 
     /**
+     * Set id
+     *
+     * @param  int $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
+    }
+
+    /**
      * Get id
      *
      * @return int

@@ -8,6 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadataFactoryInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +45,15 @@ class UserController extends Controller
      */
     public function registerUser(Request $request)
     {
+        $session = new Session();
+        if ($session->get('isOn'))
+        {
+            $session->start();
+            $session->set('isOn', true);
+        }
+
+
+
 //        $serializer = $this->get('serializer');
         $userManager = $this->get('app.user_manager');
 
@@ -61,7 +71,34 @@ class UserController extends Controller
 
         $registrationUser = $userManager->registrationUser($user);
 
+        $session->set('firstName', $user->getFirstName());
+        $session->set('lastName', $user->getLastName());
+
         return $this->render('blog/user.html.twig', array('user' => $registrationUser));
+//        return (new JsonResponse(null, 200))
+//            ->setContent($serializer->serialize($registrationUser, 'json', []));
+    }
+
+    /**
+     * @Route("/authorization", methods={"POST"}, name="blog_user_authorization")
+     */
+    public function authorizationUser(Request $request)
+    {
+        $session = new Session();
+        if ($session->get('isOn'))
+        {
+            $session->start();
+            $session->set('isOn', true);
+        }
+        $userManager = $this->get('app.user_manager');
+
+        $authorizationUser = new User();
+        $authorizationUser = $userManager->authorizationUser($_POST['email'], $_POST['password']);
+
+        $session->set('firstName', $authorizationUser->getFirstName());
+        $session->set('lastName', $authorizationUser->getLastName());
+
+        return $this->render('blog/user.html.twig', array('user' => $authorizationUser));
 //        return (new JsonResponse(null, 200))
 //            ->setContent($serializer->serialize($registrationUser, 'json', []));
     }

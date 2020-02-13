@@ -32,7 +32,7 @@ class ArticleManager
 
     public function getArticles($page, $limit)
     {
-        return $this->doctrine->getRepository(Article::class)->getArticles($page, $limit);
+        return $this->doctrine->getRepository(Article::class)->findAll();   //getArticles($page, $limit);
     }
 
 }
