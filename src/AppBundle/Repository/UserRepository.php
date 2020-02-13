@@ -15,4 +15,14 @@ class UserRepository extends EntityRepository
         $em->flush();
         return $this->find($user->getId());
     }
+
+    public function authorizationUser($email, $password)
+    {
+        $qb = $this->createQueryBuilder('user');
+        $qb->select('user');
+        $qb->where('user.email = :email');
+        $qb->andWhere('user.password = :password');
+        $qb->setParameters(['email' => $email, 'password' => $password]);
+        return $qb->getQuery()->getSingleResult();
+    }
 }

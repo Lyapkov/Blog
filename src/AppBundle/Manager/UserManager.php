@@ -30,4 +30,9 @@ class UserManager
     {
         return $this->doctrine->getRepository(User::class)->registrationUser($user);
     }
+    public function authorizationUser(string $email, string $password): ?User
+    {
+        //Возвращается юзер, если такой нашелся
+        return $this->doctrine->getRepository(User::class)->authorizationUser($email, $password);
+    }
 }
